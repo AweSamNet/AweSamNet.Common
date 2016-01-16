@@ -13,6 +13,7 @@ namespace AweSamNet.Common
     {
         IConfiguration Config { get; }
         ILogger Logger { get; }
+        IMetrics Metrics { get; }
     }
 
     public class Registry : IRegistry
@@ -21,29 +22,36 @@ namespace AweSamNet.Common
         {
             var container = new Container();
 
-            container.Register<IConfiguration, Configuration.Configuration>(Lifestyle.Singleton);
-            container.Register<ILogger, Logger>(Lifestyle.Singleton);
-            
-            //get logger types to register
-            var loggerTypes = Logging.Logger.GetLoggerTypes(container.GetInstance<IConfiguration>());
-            container.RegisterCollection<ILogger>(loggerTypes);
+            container.Register<IRegistry, Registry>();
+            container.Register<IConfiguration, Configuration.Configuration>();
+            container.Register<ILogger, Logger>();
+            container.Register<IConfigurationManager, ConfigurationManager>();
+            container.Register<IMetrics, Metrics>();
 
+            //get logger types to register
+            var loggerTypes = Logging.Logger.GetLoggerTypes();
+            if (loggerTypes.Any())
+            {
+                container.RegisterCollection<ILogProvider>(loggerTypes);
+            }
 
             return container;
         });
 
         private readonly IConfiguration _config;
         private readonly ILogger _logger;
+        private readonly IMetrics _metrics;
 
         public static Container Container
         {
             get { return _container.Value; }
         }
 
-        public Registry(IConfiguration config, ILogger logger)
+        public Registry(IConfiguration config, ILogger logger, IMetrics metrics)
         {
             _config = config;
             _logger = logger;
+            _metrics = metrics;
         }
 
         public IConfiguration Config
@@ -54,6 +62,11 @@ namespace AweSamNet.Common
         public ILogger Logger
         {
             get { return _logger; }
+        }
+
+        public IMetrics Metrics
+        {
+            get { return _metrics; }
         }
     }
 }

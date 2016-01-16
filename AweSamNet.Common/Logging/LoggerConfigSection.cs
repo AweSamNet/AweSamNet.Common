@@ -6,9 +6,14 @@ namespace AweSamNet.Common.Logging
     public class LoggerConfigSection : ConfigurationSection, ILoggerConfigSection
     {
         [ConfigurationProperty("loggerCollection")]
-        public ILoggerConfigElementCollection AllValues
+        public LoggerConfigElementCollection AllValues
         {
             get { return this["loggerCollection"] as LoggerConfigElementCollection; }
+        }
+
+        public static LoggerConfigSection GetConfigSection()
+        {
+            return ConfigurationManager.GetSection("LoggerSection") as LoggerConfigSection;
         }
     }
 }

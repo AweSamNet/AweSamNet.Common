@@ -13,13 +13,20 @@ namespace AweSamNet.Common.Logging
             _logProviders = logProviders;
         }
 
-        public static List<Type> GetLoggerTypes(IConfiguration config)
+        public static List<Type> GetLoggerTypes()
+        {
+            var loggerSection = LoggerConfigSection.GetConfigSection();
+            return GetLoggerTypes(loggerSection);
+        }
+
+        public static List<Type> GetLoggerTypes(ILoggerConfigSection loggerSection)
         {
             var loggerTypes = new List<Type>();
-            foreach (var loggerConfig in config.LoggerConfigSection.AllValues)
+            if (loggerSection == null) return loggerTypes;
+            foreach (var loggerConfig in loggerSection.AllValues)
             {
                 if (!loggerConfig.Enabled) continue;
-                loggerTypes.Add(Type.GetType((loggerConfig.FullName + ", " + loggerConfig.Assembly)));
+                loggerTypes.Add(Type.GetType(loggerConfig.FullName + ", " + loggerConfig.Assembly));
             }
             return loggerTypes;
         }
@@ -30,7 +37,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Verbose, message, args);
         }
 
-        public void Verbose(string message, Exception ex, params object[] args)
+        public void Verbose(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Verbose, message, ex, args);
         }
@@ -42,7 +49,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Debug, message, args);
         }
 
-        public void Debug(string message, Exception ex, params object[] args)
+        public void Debug(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Debug, message, ex, args);
         }
@@ -54,7 +61,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Information, message, args);
         }
 
-        public void Info(string message, Exception ex, params object[] args)
+        public void Info(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Information, message, ex, args);
         }
@@ -66,7 +73,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Warning, message, args);
         }
 
-        public void Warn(string message, Exception ex, params object[] args)
+        public void Warn(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Warning, message, ex, args);
         }
@@ -78,7 +85,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Error, message, args);
         }
 
-        public void Error(string message, Exception ex, params object[] args)
+        public void Error(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Error, message, ex, args);
         }
@@ -90,7 +97,7 @@ namespace AweSamNet.Common.Logging
             WriteLog(LoggingEventType.Fatal, message, args);
         }
 
-        public void Fatal(string message, Exception ex, params object[] args)
+        public void Fatal(Exception ex, string message, params object[] args)
         {
             WriteLog(LoggingEventType.Fatal, message, ex, args);
         }

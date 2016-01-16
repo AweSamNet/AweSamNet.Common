@@ -19,7 +19,7 @@ namespace AweSamNet.Common.Logging
         bool LockItem { get; set; }
         ElementInformation ElementInformation { get; }
         System.Configuration.Configuration CurrentConfiguration { get; }
-        new IEnumerator<LoggerConfigElement> GetEnumerator();
+        IEnumerator<LoggerConfigElement> GetEnumerator();
         bool IsReadOnly();
         bool Equals(object compareTo);
         int GetHashCode();

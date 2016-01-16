@@ -1,15 +1,36 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using Serilog;
+using Serilog.Events;
 
 namespace AweSamNet.Common.Logging.Providers
 {
     public class SerilogProvider : ILogProvider
     {
+        public static TextWriter SelfLog = Console.Out;
         static SerilogProvider()
         {
+            Serilog.Debugging.SelfLog.Out = SelfLog;
             Serilog.Log.Logger = new LoggerConfiguration()
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadId()
+                .Enrich.FromLogContext()
                 .ReadFrom.AppSettings()
-                .CreateLogger();             
+                .WriteTo.ColoredConsole()
+                .CreateLogger();
+
+            //Serilog.Log.Logger = new LoggerConfiguration()
+            //    .MinimumLevel.Is(LogEventLevel.Information)
+            //    .Enrich.WithMachineName()
+            //    .Enrich.WithThreadId()
+            //    .Enrich.FromLogContext()
+            //    .WriteTo.RollingFile("textwriter-{Date}.log",
+            //        outputTemplate:
+            //            "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} level={Level} appName={app} environment={env} version={version} machine={MachineName} thread={ThreadId} {errorContext} {context} {Message}{NewLine}{Exception}",
+            //        fileSizeLimitBytes: null)
+            //    .WriteTo.ColoredConsole()
+            //    .CreateLogger();
         }
 
         public void Log(LogEntry entry)

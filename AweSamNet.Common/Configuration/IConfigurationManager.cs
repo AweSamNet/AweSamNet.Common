@@ -3,11 +3,7 @@ using System.Configuration;
 
 namespace AweSamNet.Common.Configuration
 {
-    /// <summary>
-    ///     Provides access to configuration files for client applications. This class
-    ///     cannot be inherited.
-    /// </summary>
-    public class ConfigurationManager : IConfigurationManager
+    public interface IConfigurationManager
     {
         /// <summary>
         ///     Gets the System.Configuration.AppSettingsSection data for the current application's
@@ -22,10 +18,7 @@ namespace AweSamNet.Common.Configuration
         ///     Could not retrieve a System.Collections.Specialized.NameValueCollection object
         ///     with the application settings data.
         /// </exception>
-        public NameValueCollection AppSettings
-        {
-            get { return System.Configuration.ConfigurationManager.AppSettings; }
-        }
+        NameValueCollection AppSettings { get; }
 
         /// <summary>
         ///     Gets the System.Configuration.ConnectionStringsSection data for the current
@@ -40,10 +33,7 @@ namespace AweSamNet.Common.Configuration
         ///     Could not retrieve a System.Configuration.ConnectionStringSettingsCollection
         ///     object.
         /// </exception>
-        public ConnectionStringSettingsCollection ConnectionStrings
-        {
-            get { return System.Configuration.ConfigurationManager.ConnectionStrings; }
-        }
+        ConnectionStringSettingsCollection ConnectionStrings { get; }
 
         /// <summary>
         ///     Retrieves a specified configuration section for the current application's
@@ -55,10 +45,7 @@ namespace AweSamNet.Common.Configuration
         ///     the section does not exist.
         /// </returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public object GetSection(string sectionName)
-        {
-            return System.Configuration.ConfigurationManager.GetSection(sectionName);
-        }
+        object GetSection(string sectionName);
 
         /// <summary>
         ///     Opens the configuration file for the current application as a System.Configuration.Configuration
@@ -70,10 +57,7 @@ namespace AweSamNet.Common.Configuration
         /// </param>
         /// <returns>A System.Configuration.Configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public System.Configuration.Configuration OpenExeConfiguration(ConfigurationUserLevel userLevel)
-        {
-            return System.Configuration.ConfigurationManager.OpenExeConfiguration(userLevel);
-        }
+        System.Configuration.Configuration OpenExeConfiguration(ConfigurationUserLevel userLevel);
 
         /// <summary>
         ///     Opens the specified client configuration file as a System.Configuration.Configuration
@@ -82,10 +66,7 @@ namespace AweSamNet.Common.Configuration
         /// <param name="exePath">The path of the executable (exe) file.</param>
         /// <returns>A System.Configuration.Configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public System.Configuration.Configuration OpenExeConfiguration(string exePath)
-        {
-            return System.Configuration.ConfigurationManager.OpenExeConfiguration(exePath);
-        }
+        System.Configuration.Configuration OpenExeConfiguration(string exePath);
 
         /// <summary>
         ///     Opens the machine configuration file on the current computer as a System.Configuration.Configuration
@@ -93,11 +74,8 @@ namespace AweSamNet.Common.Configuration
         /// </summary>
         /// <returns>A System.Configuration.Configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public System.Configuration.Configuration OpenMachineConfiguration()
-        {
-            return System.Configuration.ConfigurationManager.OpenMachineConfiguration();
-        }
-            
+        System.Configuration.Configuration OpenMachineConfiguration();
+
         /// <summary>
         ///     Opens the specified client configuration file as a System.Configuration.Configuration
         ///     object that uses the specified file mapping and user level.
@@ -112,11 +90,8 @@ namespace AweSamNet.Common.Configuration
         /// </param>
         /// <returns>The configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public System.Configuration.Configuration OpenMappedExeConfiguration(ExeConfigurationFileMap fileMap,
-            ConfigurationUserLevel userLevel)
-        {
-            return System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(fileMap, userLevel);
-        }
+        System.Configuration.Configuration OpenMappedExeConfiguration(ExeConfigurationFileMap fileMap,
+            ConfigurationUserLevel userLevel);
 
         /// <summary>
         ///     Opens the specified client configuration file as a System.Configuration.Configuration
@@ -134,12 +109,9 @@ namespace AweSamNet.Common.Configuration
         /// <param name="preLoad">true to preload all section groups and sections; otherwise, false.</param>
         /// <returns>The configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
+        System.Configuration.Configuration OpenMappedExeConfiguration(ExeConfigurationFileMap fileMap,
+            ConfigurationUserLevel userLevel, bool preLoad);
 
-        public System.Configuration.Configuration OpenMappedExeConfiguration(ExeConfigurationFileMap fileMap,
-            ConfigurationUserLevel userLevel, bool preLoad)
-        {
-            return System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(fileMap, userLevel, preLoad);
-        }
         /// <summary>
         ///     Opens the machine configuration file as a System.Configuration.Configuration
         ///     object that uses the specified file mapping.
@@ -150,10 +122,7 @@ namespace AweSamNet.Common.Configuration
         /// </param>
         /// <returns>A System.Configuration.Configuration object.</returns>
         /// <exception cref="System.Configuration.ConfigurationErrorsException">A configuration file could not be loaded.</exception>
-        public System.Configuration.Configuration OpenMappedMachineConfiguration(ConfigurationFileMap fileMap)
-        {
-            return System.Configuration.ConfigurationManager.OpenMappedMachineConfiguration(fileMap);
-        }
+        System.Configuration.Configuration OpenMappedMachineConfiguration(ConfigurationFileMap fileMap);
 
         /// <summary>
         ///     Refreshes the named section so the next time that it is retrieved it will
@@ -163,10 +132,6 @@ namespace AweSamNet.Common.Configuration
         ///     The configuration section name or the configuration path and section name
         ///     of the section to refresh.
         /// </param>
-        public void RefreshSection(string sectionName)
-        {
-            System.Configuration.ConfigurationManager.RefreshSection(sectionName);
-        }
-
+        void RefreshSection(string sectionName);
     }
 }

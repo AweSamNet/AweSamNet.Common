@@ -13,7 +13,7 @@ namespace AweSamNet.Common.Logging
 
         }
 
-        public new IEnumerator<LoggerConfigElement> GetEnumerator()
+        public new virtual IEnumerator<LoggerConfigElement> GetEnumerator()
         {
             var collection = base.GetEnumerator();
             while (collection.MoveNext())
