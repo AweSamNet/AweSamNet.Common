@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
+using AweSamNet.Common.Logging;
 
 namespace AweSamNet.Common.Configuration
 {
@@ -166,6 +167,32 @@ namespace AweSamNet.Common.Configuration
         public void RefreshSection(string sectionName)
         {
             System.Configuration.ConfigurationManager.RefreshSection(sectionName);
+        }
+
+        /// <summary>
+        /// Writes settings to the config file and then refreshes it.
+        /// </summary>
+        public static void AddOrUpdateAppSettings(string key, string value)
+        {
+            try
+            {
+                var configFile = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+                if (settings[key] == null)
+                {
+                    settings.Add(key, value);
+                }
+                else
+                {
+                    settings[key].Value = value;
+                }
+                configFile.Save(ConfigurationSaveMode.Modified);
+                System.Configuration.ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            }
+            catch (ConfigurationErrorsException ex)
+            {
+                Logger.Default.Error(ex, "key={key}, value={value} - Error writing app settings", key, value );
+            }
         }
 
     }

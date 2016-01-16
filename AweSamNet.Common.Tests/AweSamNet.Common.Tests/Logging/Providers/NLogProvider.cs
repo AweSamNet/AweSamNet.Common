@@ -33,5 +33,10 @@ namespace AweSamNet.Common.Logging.Providers
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        public Action<LoggingEventType> LogLevelSetter
+        {
+            get { return null; }
+        }
     }
 }

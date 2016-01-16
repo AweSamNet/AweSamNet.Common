@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 
 namespace AweSamNet.Common.Logging.Providers
@@ -17,6 +18,7 @@ namespace AweSamNet.Common.Logging.Providers
                 .Enrich.WithThreadId()
                 .Enrich.FromLogContext()
                 .ReadFrom.AppSettings()
+                .MinimumLevel.ControlledBy(_loggingLevelSwitch)
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
 
@@ -32,6 +34,23 @@ namespace AweSamNet.Common.Logging.Providers
             //    .WriteTo.ColoredConsole()
             //    .CreateLogger();
         }
+
+        private static readonly LoggingLevelSwitch _loggingLevelSwitch = new LoggingLevelSwitch((LogEventLevel) Logger.MinimumLogLevel);
+
+        private readonly Action<LoggingEventType> _logLevelSetter = (x) => _loggingLevelSwitch.MinimumLevel = (LogEventLevel)x;
+        public Action<LoggingEventType> LogLevelSetter
+        {
+            get
+            {
+                return _logLevelSetter;
+            }
+        }
+            
+                        
+        //    LoggingLevel()
+        //{
+        //    _loggingLevelSwitch.MinimumLevel = (LogEventLevel) eventType;
+        //}
 
         public void Log(LogEntry entry)
         {
