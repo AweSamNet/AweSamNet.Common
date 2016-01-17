@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AweSamNet.Common.Interfaces
+namespace AweSamNet.Common.Caching
 {
     public interface ICache
     {

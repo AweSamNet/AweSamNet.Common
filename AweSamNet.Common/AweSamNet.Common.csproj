@@ -69,7 +69,7 @@
     <Compile Include="Logging\Providers\SerilogProvider.cs" />
     <Compile Include="Registry.cs" />
     <Compile Include="Configuration\Configuration.cs" />
-    <Compile Include="Interfaces\ICache.cs" />
+    <Compile Include="Caching\ICache.cs" />
     <Compile Include="Logging\ILoggerConfigSection.cs" />
     <Compile Include="Logging\ILogProvider.cs" />
     <Compile Include="Logging\LogEntry.cs" />
