@@ -1,7 +1,8 @@
 ﻿using System;
+using AweSamNet.Common.Logging;
 using NLog;
 
-namespace AweSamNet.Common.Logging.Providers
+namespace AweSamNet.Common.Tests.Logging.Providers
 {
     public class NLogProvider : ILogProvider
     {
