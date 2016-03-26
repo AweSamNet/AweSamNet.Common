@@ -1,15 +1,28 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Caching;
+using AweSamNet.Common.Configuration;
 using NetMemoryCache = System.Runtime.Caching.MemoryCache;
 
 namespace AweSamNet.Common.Caching
 {   
     public class MemoryCache : ICache
     {
-        public T GetOrAdd<T>(string key, Func<T> setter, TimeSpan expiration)
+        private readonly IConfiguration _configuration;
+
+        public MemoryCache(IConfiguration configuration)
         {
-            return (T)NetMemoryCache.Default.AddOrGetExisting(key, setter(), new CacheItemPolicy() { SlidingExpiration = expiration });
+            _configuration = configuration;
+        }
+
+        public T GetOrAdd<T>(string key, Func<T> setter, TimeSpan? expiration)
+        {
+            var value = NetMemoryCache.Default.AddOrGetExisting(key, setter(), new CacheItemPolicy()
+            {
+                SlidingExpiration = expiration.HasValue && expiration != TimeSpan.Zero ? expiration.Value : _configuration.DefaultCacheExpiration
+            });
+
+            return value != null ? (T)value : (T)NetMemoryCache.Default.Get(key);
         }
 
         public void Remove(string key)

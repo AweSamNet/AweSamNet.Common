@@ -17,6 +17,17 @@ namespace AweSamNet.Common.Configuration
 
             _environment = new Lazy<string>(() =>
                 _configurationManager.AppSettings["environment"]);
+
+            _defaultCacheExpiration = new Lazy<TimeSpan>(() =>
+            {
+                int minutes;
+                if (!int.TryParse(_configurationManager.AppSettings["Cache.DefaultExpirationMinutes"], out minutes))
+                {
+                    minutes = 20;
+                }
+
+                return new TimeSpan(0, minutes, 0);
+            });
         }
 
         private readonly Lazy<ILoggerConfigSection> _loggerConfigSection;
@@ -36,5 +47,12 @@ namespace AweSamNet.Common.Configuration
         {
             get { return _environment.Value; }
         }
+
+        private readonly Lazy<TimeSpan> _defaultCacheExpiration;
+        public TimeSpan DefaultCacheExpiration
+        {
+            get { return _defaultCacheExpiration.Value; }
+        }
+
     }
 }

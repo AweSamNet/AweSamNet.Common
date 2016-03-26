@@ -8,7 +8,7 @@ namespace AweSamNet.Common.Caching
 {
     public interface ICache
     {
-        T GetOrAdd<T>(string key, Func<T> setter, TimeSpan expiration);
+        T GetOrAdd<T>(string key, Func<T> setter, TimeSpan? expiration = null);
         void Remove(string key);
         void RemoveAll(string keyContains);
     }

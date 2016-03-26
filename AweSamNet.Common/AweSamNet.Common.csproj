@@ -59,6 +59,7 @@
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\ILoggerConfigElementCollection.cs" />
     <Compile Include="Logging\Logger.cs" />
