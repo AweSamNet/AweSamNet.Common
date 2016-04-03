@@ -3,27 +3,27 @@ using System.Linq;
 using System.Collections.Generic;
 using AweSamNet.Common.Configuration;
 using AweSamNet.Common.Logging;
-using AweSamNet.Common.Logging.Providers;
+using AweSamNet.Common.Tests.Logging.Providers;
 using Moq;
 using NUnit.Framework;
 
 namespace AweSamNet.Common.Tests.Logging
 {
     [TestFixture]
-    public class Logger
+    public class LoggerTest
     {
         [Test]
         public void logger_types_can_be_loaded_from_config_and_instantiated_into_loggers()
         {
             //assemble
-            var nLogProviderType = typeof(NLogProvider);
+            var nLogProviderType = typeof(TestLogProvider1);
             var nLogElement = new LoggerConfigElement
             {
                 Assembly = nLogProviderType.Assembly.FullName,
                 FullName = nLogProviderType.FullName
             };
 
-            var serilogProviderType = typeof(SerilogProvider);
+            var serilogProviderType = typeof(TestLogProvider2);
             var serilogElement = new LoggerConfigElement
             {
                 Assembly = serilogProviderType.Assembly.FullName,
@@ -69,9 +69,9 @@ namespace AweSamNet.Common.Tests.Logging
 
         private readonly object[] _providerData =
         {
-            new object[] {new ILogProvider[] {new SerilogProvider()}},
-            new object[] {new ILogProvider[] {new NLogProvider()}},
-            new object[] {new ILogProvider[] {new SerilogProvider(), new NLogProvider()}},
+            new object[] {new ILogProvider[] {new TestLogProvider1()}},
+            new object[] {new ILogProvider[] {new TestLogProvider2()}},
+            new object[] {new ILogProvider[] {new TestLogProvider1(), new TestLogProvider2()}},
         };
 
         [Test, TestCaseSource("_providerData")]

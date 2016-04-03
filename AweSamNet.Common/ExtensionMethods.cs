@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AweSamNet.Common
 {
@@ -21,5 +22,9 @@ namespace AweSamNet.Common
             return source.Skip((page - 1) * pageSize).Take(pageSize);
         }
 
+        public static T JsonClone<T>(this T obj) where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+        }
     }
 }

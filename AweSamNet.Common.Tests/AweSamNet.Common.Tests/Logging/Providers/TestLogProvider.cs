@@ -1,34 +1,46 @@
 ﻿using System;
 using AweSamNet.Common.Logging;
-using NLog;
 
 namespace AweSamNet.Common.Tests.Logging.Providers
 {
-    public class NLogProvider : ILogProvider
+    public class TestLogProvider1 : ILogProvider
     {
-        private static NLog.Logger Default = LogManager.GetCurrentClassLogger();
 
         public void Log(LogEntry entry)
         {
             switch (entry.Severity)
             {
                 case LoggingEventType.Verbose:
-                    Default.Trace(entry.Exception, entry.Message, entry.Args);
-                    break;
                 case LoggingEventType.Debug:
-                    Default.Debug(entry.Exception, entry.Message, entry.Args);
-                    break;
                 case LoggingEventType.Information:
-                    Default.Info(entry.Exception, entry.Message, entry.Args);
-                    break;
                 case LoggingEventType.Warning:
-                    Default.Warn(entry.Exception, entry.Message, entry.Args);
-                    break;
                 case LoggingEventType.Error:
-                    Default.Error(entry.Exception, entry.Message, entry.Args);
-                    break;
                 case LoggingEventType.Fatal:
-                    Default.Fatal(entry.Exception, entry.Message, entry.Args);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public Action<LoggingEventType> LogLevelSetter
+        {
+            get { return null; }
+        }
+    }
+
+    public class TestLogProvider2 : ILogProvider
+    {
+
+        public void Log(LogEntry entry)
+        {
+            switch (entry.Severity)
+            {
+                case LoggingEventType.Verbose:
+                case LoggingEventType.Debug:
+                case LoggingEventType.Information:
+                case LoggingEventType.Warning:
+                case LoggingEventType.Error:
+                case LoggingEventType.Fatal:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
