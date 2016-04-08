@@ -5,23 +5,23 @@ namespace AweSamNet.Common.Configuration
 {
     public class Configuration : IConfiguration
     {
-        private readonly ConfigurationManager _configurationManager;
+        protected ConfigurationManager ConfigurationManager { get; private set; }
         public Configuration(ConfigurationManager configurationManager)
         {
-            _configurationManager = configurationManager;
+            ConfigurationManager = configurationManager;
             _loggerConfigSection = new Lazy<ILoggerConfigSection>(() => 
-                _configurationManager.GetSection("LoggerSection") as LoggerConfigSection);
+                ConfigurationManager.GetSection("LoggerSection") as LoggerConfigSection);
 
             _application = new Lazy<string>(() =>
-                _configurationManager.AppSettings["appName"]);
+                ConfigurationManager.AppSettings["appName"]);
 
             _environment = new Lazy<string>(() =>
-                _configurationManager.AppSettings["environment"]);
+                ConfigurationManager.AppSettings["environment"]);
 
             _defaultCacheExpiration = new Lazy<TimeSpan>(() =>
             {
                 int minutes;
-                if (!int.TryParse(_configurationManager.AppSettings["Cache.DefaultExpirationMinutes"], out minutes))
+                if (!int.TryParse(ConfigurationManager.AppSettings["Cache.DefaultExpirationMinutes"], out minutes))
                 {
                     minutes = 20;
                 }
