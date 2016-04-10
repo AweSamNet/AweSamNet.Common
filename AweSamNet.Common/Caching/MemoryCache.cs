@@ -9,7 +9,6 @@ namespace AweSamNet.Common.Caching
     public class MemoryCache : ICache
     {
         private readonly IConfiguration _configuration;
-
         public MemoryCache(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -17,6 +16,13 @@ namespace AweSamNet.Common.Caching
 
         public T GetOrAdd<T>(string key, Func<T> setter, TimeSpan? expiration)
         {
+            //make sure we have a cache expiration
+            if ((expiration == null || expiration.Value == TimeSpan.Zero) &&
+                _configuration.DefaultCacheExpiration == TimeSpan.Zero)
+            {
+                throw new ArgumentException("Exipration is required.");
+            }
+
             var value = NetMemoryCache.Default.AddOrGetExisting(key, setter(), new CacheItemPolicy()
             {
                 SlidingExpiration = expiration.HasValue && expiration != TimeSpan.Zero ? expiration.Value : _configuration.DefaultCacheExpiration
