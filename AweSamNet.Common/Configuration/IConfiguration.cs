@@ -9,5 +9,7 @@ namespace AweSamNet.Common.Configuration
         string Application { get; }
         string Environment { get; }
         TimeSpan DefaultCacheExpiration { get; }
+        string GeoLookupGeoNamesUser { get; }
+        TimeSpan GeoLookupCacheExpiration { get; }
     }
 }

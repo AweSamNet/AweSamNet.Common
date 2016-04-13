@@ -81,6 +81,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logging\Providers\SerilogProvider.cs" />
+    <Compile Include="Models\AdministrativeRegion.cs" />
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\GeonamesCollection.cs" />
     <Compile Include="Registry.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Caching\ICache.cs" />
@@ -92,6 +95,8 @@
     <Compile Include="Logging\LoggerConfigElement.cs" />
     <Compile Include="Logging\LoggingEventType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GeoLookupService.cs" />
+    <Compile Include="Services\IGeoLookupService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

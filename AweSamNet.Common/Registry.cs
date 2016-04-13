@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AweSamNet.Common.Caching;
 using AweSamNet.Common.Configuration;
+using AweSamNet.Common.Services;
 using SimpleInjector;
 using AweSamNet.Common.Logging;
 
@@ -42,9 +43,10 @@ namespace AweSamNet.Common
             }
 
             container.Register<ILogger, Logger>();
-            container.Register<IConfigurationManager, ConfigurationManager>();
-            container.Register<IMetrics, Metrics>();
             container.Register<ICache, MemoryCache>();
+            container.Register<IConfigurationManager, ConfigurationManager>();
+            container.Register<IGeoLookupService, GeonamesOrgLookupService>();
+            container.Register<IMetrics, Metrics>();
 
             return container;
         });

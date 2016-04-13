@@ -13,13 +13,23 @@ namespace AweSamNet.Common
         //used by EF
         public static IQueryable<TSource> Page<TSource>(this IQueryable<TSource> source, int page, int pageSize)
         {
-            return source.Skip((page - 1) * pageSize).Take(pageSize);
+            if (page > 0 && pageSize > 0)
+            {
+                return source.Skip((page - 1)*pageSize).Take(pageSize);
+            }
+
+            return source;
         }
 
         //used by LINQ
         public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int page, int pageSize)
         {
-            return source.Skip((page - 1) * pageSize).Take(pageSize);
+            if (page > 0 && pageSize > 0)
+            {
+                return source.Skip((page - 1)*pageSize).Take(pageSize);
+            }
+
+            return source;
         }
 
         public static T JsonClone<T>(this T obj) where T : class

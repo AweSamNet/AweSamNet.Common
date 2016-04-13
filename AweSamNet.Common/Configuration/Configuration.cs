@@ -28,6 +28,20 @@ namespace AweSamNet.Common.Configuration
 
                 return new TimeSpan(0, minutes, 0);
             });
+
+            _geoLookupGeoNamesUser = new Lazy<string>(() =>
+                ConfigurationManager.AppSettings["GeoLookup.GeoNamesUser"]);
+
+            _geoLookupCacheExpiration = new Lazy<TimeSpan>(() =>
+            {
+                int minutes;
+                if (!int.TryParse(ConfigurationManager.AppSettings["GeoLookup.CacheExpirationMinutes"], out minutes))
+                {
+                    return TimeSpan.FromDays(7);
+                }
+
+                return new TimeSpan(0, minutes, 0);
+            });
         }
 
         private readonly Lazy<ILoggerConfigSection> _loggerConfigSection;
@@ -54,5 +68,16 @@ namespace AweSamNet.Common.Configuration
             get { return _defaultCacheExpiration.Value; }
         }
 
+        private readonly Lazy<string> _geoLookupGeoNamesUser;
+        public string GeoLookupGeoNamesUser
+        {
+            get { return _geoLookupGeoNamesUser.Value; }
+        }
+
+        private readonly Lazy<TimeSpan> _geoLookupCacheExpiration;
+        public TimeSpan GeoLookupCacheExpiration
+        {
+            get { return _geoLookupCacheExpiration.Value; }
+        }
     }
 }
