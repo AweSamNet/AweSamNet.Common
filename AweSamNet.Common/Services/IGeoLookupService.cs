@@ -8,7 +8,10 @@ namespace AweSamNet.Common.Services
     {
         IList<Country> GetCountryList(CultureInfo culture, int page = 0, int pageSize = 0);
         IList<Country> GetCountryList(string culture = null, int page = 0, int pageSize = 0);
-        IList<AdministrativeRegion> GetAdministrativeRegions(int parentGeonameId, CultureInfo culture, int page = 0, int pageSize = 0);
-        IList<AdministrativeRegion> GetAdministrativeRegions(int parentGeonameId, string culture = null, int page = 0, int pageSize = 0);
+        IList<AdministrativeRegion> GetAdministrativeRegions1(string countryCode, CultureInfo culture, int page = 0, int pageSize = 0);
+        IList<AdministrativeRegion> GetAdministrativeRegions1(string countryCode, string culture = null, int page = 0, int pageSize = 0);
+        IList<AdministrativeRegion> Search(GeoLookupSearchOptions options);
+        IList<AdministrativeRegion> Search(GeoLookupSearchOptions options, string culture);
+
     }
 }
