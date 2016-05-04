@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -64,6 +66,20 @@ namespace AweSamNet.Common
             if (propertyNames.Length == 1 || value == null) return value;
 
             return GetPropertyValue(value, path.Replace(propertyNames[0] + ".", ""));
+        }
+
+        //http://stackoverflow.com/a/9601914/1509728
+        public static void SetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda, TValue value)
+        {
+            var memberSelectorExpression = memberLamda.Body as MemberExpression;
+            if (memberSelectorExpression != null)
+            {
+                var property = memberSelectorExpression.Member as PropertyInfo;
+                if (property != null)
+                {
+                    property.SetValue(target, value, null);
+                }
+            }
         }
     }
 }
