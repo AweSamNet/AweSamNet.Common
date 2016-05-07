@@ -81,5 +81,20 @@ namespace AweSamNet.Common
                 }
             }
         }
+
+        public static TValue GetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda)
+        {
+            var memberSelectorExpression = memberLamda.Body as MemberExpression;
+            if (memberSelectorExpression != null)
+            {
+                var property = memberSelectorExpression.Member as PropertyInfo;
+                if (property != null)
+                {
+                    return (TValue)property.GetValue(target);
+                }
+            }
+
+            return default(TValue);
+        }
     }
 }
