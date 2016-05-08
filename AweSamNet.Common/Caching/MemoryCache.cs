@@ -23,9 +23,13 @@ namespace AweSamNet.Common.Caching
                 throw new ArgumentException("Exipration is required.");
             }
 
-            var value = NetMemoryCache.Default.AddOrGetExisting(key, setter(), new CacheItemPolicy()
+            var value = NetMemoryCache.Default[key] ??
+                        NetMemoryCache.Default.AddOrGetExisting(key, setter(), new CacheItemPolicy()
             {
-                SlidingExpiration = expiration.HasValue && expiration != TimeSpan.Zero ? expiration.Value : _configuration.DefaultCacheExpiration
+                SlidingExpiration =
+                    expiration.HasValue && expiration != TimeSpan.Zero
+                        ? expiration.Value
+                        : _configuration.DefaultCacheExpiration
             });
 
             return value != null ? (T)value : (T)NetMemoryCache.Default.Get(key);
