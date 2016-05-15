@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -58,14 +59,14 @@ namespace AweSamNet.Common
             }
         }
 
-        public static object GetPropertyValue(this object o, string path)
+        public static object GetValue(this object o, string path)
         {
             var propertyNames = path.Split('.');
             var value = o.GetType().GetProperty(propertyNames[0]).GetValue(o, null);
 
             if (propertyNames.Length == 1 || value == null) return value;
 
-            return GetPropertyValue(value, path.Replace(propertyNames[0] + ".", ""));
+            return GetValue(value, path.Replace(propertyNames[0] + ".", ""));
         }
 
         //http://stackoverflow.com/a/9601914/1509728
@@ -82,20 +83,108 @@ namespace AweSamNet.Common
             }
         }
 
-        public static TValue GetPropertyValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda)
+        public static TValue GetValue<T, TValue>(this T target, Expression<Func<T, TValue>> memberLamda)
         {
-            var memberSelectorExpression = memberLamda.Body as MemberExpression;
-            if (memberSelectorExpression != null)
-            {
-                var property = memberSelectorExpression.Member as PropertyInfo;
-                if (property != null)
-                {
-                    return (TValue)property.GetValue(target);
-                }
-            }
+            //var memberSelectorExpression = memberLamda.Body as MemberExpression;
+            //if (memberSelectorExpression != null)
+            //{
+            //    //var expressionTree = new Queue<_MemberInfo>();
 
-            return default(TValue);
+            //    //var innerExpression = memberSelectorExpression;
+            //    ////loop through the expression to see if it is a valid property expression
+            //    //do
+            //    //{
+
+
+
+            //    //    expressionTree.Enqueue(property);
+
+            //    //} while (innerExpression.Expression.NodeType != ExpressionType.Parameter);
+
+            //    var property = memberSelectorExpression.Member as PropertyInfo;
+            //    if (property != null)
+            //    {
+            //        return (TValue)property.GetValue(target);
+            //    }
+            //}
+
+            //return memberLamda.Compile()(target);
+
+            return (TValue)GetExpressionValue(target, memberLamda.Body);
         }
+
+        private static object GetExpressionValue<T>(T target, Expression expression)
+        {
+
+            if (expression is MethodCallExpression)
+            {
+                var methodCallExpression = expression as MethodCallExpression;
+
+                var methodInfo = methodCallExpression.Method;
+                var allParameters = from element in methodCallExpression.Arguments
+                                    select GetExpressionValue(target, element);
+
+                if(methodInfo.IsStatic) return methodInfo.Invoke(null, allParameters.ToArray());
+                if (methodCallExpression.Object == null) return methodInfo.Invoke(target, allParameters.ToArray());
+
+                var methodTarget = GetExpressionValue(target, methodCallExpression.Object);
+                return methodInfo.Invoke(methodTarget, allParameters.ToArray());
+            }
+            else if (expression is MemberExpression)
+            {
+                var memberExpression = expression as MemberExpression;
+
+                // expression is ConstantExpression or FieldExpression then just return the value
+                if (memberExpression.Expression is ConstantExpression)
+                {
+                    return (((ConstantExpression)memberExpression.Expression).Value)
+                            .GetType()
+                            .GetField(memberExpression.Member.Name)
+                            .GetValue(((ConstantExpression)memberExpression.Expression).Value);
+                }
+
+                if (memberExpression.Expression is ParameterExpression)
+                {
+                    return GetMemberValue(memberExpression, target);
+                }
+
+                var parentObject = GetExpressionValue(target, memberExpression.Expression);
+                return parentObject == null ? null : GetMemberValue(memberExpression, parentObject);
+            }
+            throw new NotSupportedException(
+                string.Format("The expression {0} is not supported on {1}, with an Expression type of {2}."
+                    , target
+                    , target.GetType()
+                    , expression.GetType()));
+        }
+
+        /// <summary>
+        /// Tries to return the value of a memberExpression for a given target.  If unsuccessful, a NotCupportedException is thrown.
+        /// </summary>
+        private static object GetMemberValue(MemberExpression memberExpression, object target)
+        {
+            //if this is the top-most expression, then return the value
+            switch (memberExpression.Member.MemberType)
+            {
+                case MemberTypes.Field:
+                    if (memberExpression.Member is FieldInfo)
+                    {
+                        return (memberExpression.Member as FieldInfo).GetValue(target);
+                    }
+                    break;
+                case MemberTypes.Property:
+                    if (memberExpression.Member is PropertyInfo)
+                    {
+                        return (memberExpression.Member as PropertyInfo).GetValue(target);
+                    }
+                    break;
+            }
+            throw new NotSupportedException(
+                string.Format("The expression {0} is not supported on {1}, with a MemberType of {2}."
+                    , memberExpression
+                    , target.GetType()
+                    , memberExpression.Member.MemberType));
+        }        
 
         public static Expression<Func<TFirstParam, TResult>> Combine<TFirstParam, TIntermediate, TResult>(
             this Expression<Func<TFirstParam, TIntermediate>> first,
