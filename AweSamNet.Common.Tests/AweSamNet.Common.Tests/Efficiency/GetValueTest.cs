@@ -74,7 +74,7 @@ namespace AweSamNet.Common.Tests.Efficiency
                         Name = "Sam Lombardo"
                     },
                     Expression = (x) => x.Addresses.FirstOrDefault(),
-                    TimesToRun = 100000
+                    TimesToRun = 10000
                 };
                 yield return new PersonTestCase
                 {
