@@ -49,5 +49,12 @@ namespace AweSamNet.Common.Caching
                 NetMemoryCache.Default.Remove(key);
             }
         }
+
+        public T Get<T>(string key)
+        {
+            var value = NetMemoryCache.Default[key];
+            
+            return value == null ? default(T) : (T)value;
+        }
     }
 }

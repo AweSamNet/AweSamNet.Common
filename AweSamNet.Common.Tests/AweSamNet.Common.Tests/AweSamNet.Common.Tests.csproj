@@ -53,6 +53,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Efficiency\GetValueTest.cs" />
     <Compile Include="Logging\LoggerTest.cs" />
     <Compile Include="Logging\Providers\TestLogProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
