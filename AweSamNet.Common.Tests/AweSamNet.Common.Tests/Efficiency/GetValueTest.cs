@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AweSamNet.Common.Configuration;
+using AweSamNet.Common.Helpers;
 using AweSamNet.Common.Logging;
 using AweSamNet.Common.Tests.Logging.Providers;
-using AweSamNet.Common.Utilities;
 using Moq;
 using NUnit.Framework;
 

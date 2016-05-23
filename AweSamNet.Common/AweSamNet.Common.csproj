@@ -73,6 +73,7 @@
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\IConfigurationManager.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\ILoggerConfigElementCollection.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GeonamesOrgLookupService.cs" />
     <Compile Include="Services\IGeoLookupService.cs" />
-    <Compile Include="Utilities\ExpressionUtility.cs" />
+    <Compile Include="Helpers\ExpressionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

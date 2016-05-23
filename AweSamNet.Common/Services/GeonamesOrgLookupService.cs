@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AweSamNet.Common.Models;
+using AweSamNet.Common.Helpers;
 using Newtonsoft.Json;
 
 namespace AweSamNet.Common.Services
@@ -146,7 +147,7 @@ namespace AweSamNet.Common.Services
                 url += "&country=" + options.CountryCode;
             }
 
-            var featureCodes = options.FeatureCodes.GetUniqueFlags();
+            var featureCodes = options.FeatureCodes.GetValues();
             foreach (var code in featureCodes)
             {
                 url += "&fcode=" + code;

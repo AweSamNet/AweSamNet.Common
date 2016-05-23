@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AweSamNet.Common.Utilities
+namespace AweSamNet.Common.Helpers
 {
-    public static class ExpressionUtility
+    public static class ExpressionHelper
     {
         public static object GetValue(this object o, string path)
         {
