@@ -12,7 +12,7 @@ namespace AweSamNet.Common.Logging.Providers
         public static TextWriter SelfLog = Console.Out;
         static SerilogProvider()
         {
-            Serilog.Debugging.SelfLog.Out = SelfLog;
+            Serilog.Debugging.SelfLog.Enable(SelfLog);
             Serilog.Log.Logger = new LoggerConfiguration()
                 .Enrich.WithMachineName()
                 .Enrich.WithThreadId()
