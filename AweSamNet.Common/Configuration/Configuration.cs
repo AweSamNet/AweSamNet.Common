@@ -5,8 +5,8 @@ namespace AweSamNet.Common.Configuration
 {
     public class Configuration : IConfiguration
     {
-        protected ConfigurationManager ConfigurationManager { get; private set; }
-        public Configuration(ConfigurationManager configurationManager)
+        protected IConfigurationManager ConfigurationManager { get; private set; }
+        public Configuration(IConfigurationManager configurationManager)
         {
             ConfigurationManager = configurationManager;
             _loggerConfigSection = new Lazy<ILoggerConfigSection>(() => 
